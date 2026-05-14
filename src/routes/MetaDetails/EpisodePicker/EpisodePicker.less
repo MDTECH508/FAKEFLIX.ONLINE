@@ -1,4 +1,7 @@
-// Copyright (C) 2017-2025 Smart code 203358507
+// Copyright (C) 2017-2026 Fake YT Tech / Smart code
+
+@neon-cyan: #00fff2;
+@glass-bg: rgba(255, 255, 255, 0.05);
 
 .button-container {
     flex: none;
@@ -6,15 +9,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: var(--focus-outline-size) solid var(--primary-accent-color);
-    background-color: var(--primary-accent-color);
-    height: 4rem;
-    padding: 0 2rem;
-    margin: 1rem auto;
-    border-radius: 2rem;
+    // Nou itilize yon liy neon fen olye de yon gwo liy solid
+    border: 1px solid rgba(0, 255, 242, 0.3);
+    background-color: @glass-bg;
+    // Efè Lip Glass
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    height: 3.5rem; // Yon ti jan pi fen pou l parèt pi modèn
+    padding: 0 2.5rem;
+    margin: 1.5rem auto;
+    border-radius: 999rem; // Bouton ki won nèt tankou Netflix/iPhone
+    
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 
-    &:hover {
-        background-color: transparent;
+    &:hover, &:focus {
+        background-color: rgba(0, 255, 242, 0.1);
+        border-color: @neon-cyan;
+        // Efè Glow Cyberpunk
+        box-shadow: 0 0 20px rgba(0, 255, 242, 0.4);
+        transform: translateY(-2px) scale(1.02);
+
+        .label {
+            color: @neon-cyan;
+            text-shadow: 0 0 8px rgba(0, 255, 242, 0.6);
+        }
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.98);
     }
 
     .label {
@@ -23,7 +48,10 @@
         font-weight: 700;
         max-height: 3.5rem;
         text-align: center;
-        color: var(--primary-foreground-color);
+        color: #ffffff;
+        text-transform: uppercase; // Pou l parèt pi "Gaming"
+        letter-spacing: 0.05em;
         margin-bottom: 0;
+        transition: all 0.3s ease;
     }
 }

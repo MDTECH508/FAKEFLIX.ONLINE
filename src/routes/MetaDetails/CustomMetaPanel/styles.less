@@ -1,16 +1,15 @@
 // Copyright (C) 2017-2024 Smart code 203358507
-
 @import (reference) '~stremio/common/screen-sizes.less';
 
-// ---------- design tokens (SaintStream cinematic) ----------
-@bg:            #050505;
+// ---------- design tokens (Cyber-SaintStream cinematic) ----------
+@bg:            #020203; // Pi nwa pou neon an soti
 @bg-elev:       #0d0e10;
 @bg-soft:       #15171a;
-@green:         #00925d;
-@green-hover:   #00a96c;
-@green-soft:    fade(#00925d, 18%);
-@green-glow:    fade(#00925d, 45%);
-@green-line:    fade(#00925d, 75%);
+@green:         #00ff9d; // Neon Green
+@green-hover:   #05ffa1;
+@green-soft:    fade(#00ff9d, 18%);
+@green-glow:    fade(#00ff9d, 45%);
+@green-line:    fade(#00ff9d, 75%);
 @yellow:        #ffcd1a;
 @text:          #f9f9f9;
 @text-muted:    #9ca4ab;
@@ -21,6 +20,7 @@
 @radius-md:     1rem;
 @radius-lg:     1.4rem;
 @ease:          cubic-bezier(0.2, 0.8, 0.2, 1);
+@glass:         blur(12px); // Efè Glassmorphism
 
 // ---------- container ----------
 .custom-meta-panel {
@@ -32,14 +32,18 @@
 }
 
 // ============================================================
-// HERO
+// HERO (Ranje pou Landscape ak Laptop)
 // ============================================================
 .hero {
     position: relative;
     width: 100%;
-    min-height: clamp(420px, 70vh, 720px);
+    min-height: clamp(420px, 75vh, 720px); // Ogmante pou laptop
     overflow: hidden;
     isolation: isolate;
+
+    @media @phone-landscape {
+        min-height: 100vh; // Ranje pwoblèm ti ekran landscape
+    }
 }
 
 .hero-backdrop {
@@ -101,7 +105,7 @@
     flex-direction: column;
     gap: 1rem;
     padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 4rem) clamp(1.5rem, 3vw, 2.75rem);
-    margin-top: clamp(220px, 36vh, 380px);
+    margin-top: clamp(220px, 40vh, 380px); // Ranje pozisyon pou laptop
     max-width: 56rem;
 }
 
@@ -120,14 +124,15 @@
     padding: 0 0.85rem;
     border-radius: 0.45rem;
     background: rgba(0, 0, 0, 0.55);
-    border: 1px solid @border;
-    color: @text;
+    border: 1px solid @green-line; // Cyber border
+    color: @green; // Cyber text
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: @glass;
+    -webkit-backdrop-filter: @glass;
+    box-shadow: 0 0 10px @green-glow; // Glow efekt
 }
 
 .vf-badge {
@@ -149,18 +154,8 @@
 }
 
 @keyframes vfPulse {
-    0%, 100% {
-        box-shadow:
-            0 0 12px rgba(0, 87, 231, 0.4),
-            0 0 24px rgba(0, 87, 231, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-    50% {
-        box-shadow:
-            0 0 18px rgba(0, 87, 231, 0.6),
-            0 0 36px rgba(0, 87, 231, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
+    0%, 100% { box-shadow: 0 0 12px rgba(0, 87, 231, 0.4), 0 0 24px rgba(0, 87, 231, 0.2); }
+    50% { box-shadow: 0 0 18px rgba(0, 87, 231, 0.6), 0 0 36px rgba(0, 87, 231, 0.35); }
 }
 
 .vf-badge-text {
@@ -175,7 +170,6 @@
     color: #0057e7;
     font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
 }
 
@@ -183,8 +177,6 @@
     color: #fff;
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .hero-title {
@@ -193,9 +185,8 @@
     font-size: clamp(2rem, 4.6vw, 3.4rem);
     font-weight: 700;
     line-height: 1.05;
-    letter-spacing: -0.025em;
     color: @text;
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.55);
+    text-shadow: 0 0 25px @green-glow; // Cyber Title Glow
     max-width: 22ch;
 }
 
@@ -208,13 +199,6 @@
     font-size: 0.95rem;
     font-weight: 500;
 
-    > span {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
     > span + span::before {
         content: '\2022';
         margin: 0 0.85rem;
@@ -225,12 +209,7 @@
 .hero-rating {
     color: @yellow;
     font-weight: 600;
-
-    .hero-rating-icon {
-        width: 0.95rem;
-        height: 0.95rem;
-        fill: @yellow;
-    }
+    .hero-rating-icon { width: 0.95rem; height: 0.95rem; fill: @yellow; }
 }
 
 .hero-actions {
@@ -243,96 +222,30 @@
     width: 100%;
 }
 
-.actions-primary,
-.actions-secondary {
+.actions-primary, .actions-secondary {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     align-items: center;
 }
 
-// ---------- buttons ----------
-.btn-primary,
-.btn-outline {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    height: 3.1rem;
-    min-width: 11rem;
-    padding: 0 1.6rem;
-    border-radius: 0.85rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.005em;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.18s @ease, background-color 0.18s @ease, border-color 0.18s @ease, color 0.18s @ease, box-shadow 0.18s @ease;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
+// ---------- buttons (Cyber Mod) ----------
 .btn-primary {
     background: @green;
-    color: @text;
+    color: #000; // Nwa sou vèt neon pou lizibilite
     border: 1px solid @green;
-    box-shadow: 0 14px 30px -12px @green-glow, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 20px @green-glow; // Glow efekt
 
-    &:hover { background: @green-hover; border-color: @green-hover; transform: translateY(-1px); }
-    &:active { transform: translateY(0) scale(0.98); }
+    &:hover { background: @green-hover; transform: translateY(-2px); box-shadow: 0 0 30px @green; }
 }
-
-.btn-loading,
-.btn-disabled {
-    background: rgba(0, 146, 93, 0.32) !important;
-    border-color: transparent !important;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.spinner {
-    width: 0.95rem;
-    height: 0.95rem;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: @text;
-    animation: spin 0.85s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
 
 .btn-outline {
     background: rgba(255, 255, 255, 0.04);
     color: @text;
     border: 1px solid @border-strong;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: @glass;
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.28);
-        transform: translateY(-1px);
-    }
-    &:active { transform: translateY(0) scale(0.98); }
-}
-
-.btn-active {
-    background: @green-soft !important;
-    border-color: @green-line !important;
-    color: @text !important;
-}
-
-.btn-success {
-    background: rgba(0, 146, 93, 0.25) !important;
-    border-color: @green-line !important;
-}
-
-.btn-icon {
-    width: 1.05rem;
-    height: 1.05rem;
-    flex: none;
-    fill: currentColor;
-    color: currentColor;
+    &:hover { border-color: @green; color: @green; box-shadow: 0 0 15px @green-glow; }
 }
 
 // ============================================================
@@ -348,15 +261,9 @@
     display: flex;
     flex-direction: column;
     gap: clamp(2rem, 4vw, 3.25rem);
-    overflow: visible;
 }
 
-.section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    overflow: visible;
-}
+.section { display: flex; flex-direction: column; gap: 1rem; }
 
 .section-similar {
     margin-top: 0.5rem;
@@ -365,17 +272,12 @@
 }
 
 .section-title {
-    margin: 0;
     font-size: clamp(1.05rem, 1.4vw, 1.25rem);
     font-weight: 600;
-    letter-spacing: -0.01em;
-    color: @text;
+    color: @green; // Cyber Title
 }
 
-// ---------- description ----------
 .description {
-    position: relative;
-    margin: 0;
     color: @text-muted;
     font-size: 0.98rem;
     line-height: 1.65;
@@ -385,1127 +287,87 @@
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 
-    a, .stremio-link {
-        color: @green;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        text-decoration-color: rgba(0, 146, 93, 0.4);
-        transition: color 0.15s @ease, text-decoration-color 0.15s @ease;
-        &:hover { color: @green-hover; text-decoration-color: @green-hover; }
-    }
+    a { color: @green; }
 }
 
-.description-expanded {
-    -webkit-line-clamp: unset;
-    display: block;
-}
-
-.description-fade { display: none; }
-
-.more-toggle {
-    align-self: flex-start;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    color: @green;
-    font-weight: 600;
-    font-size: 0.92rem;
-    cursor: pointer;
-    transition: color 0.15s @ease;
-    &:hover { color: @green-hover; }
-}
-
-// ---------- horizontal rails ----------
 .rail-wrap {
     position: relative;
     margin: 0 calc(-1 * clamp(1.25rem, 4vw, 4rem));
     padding: 0 clamp(1.25rem, 4vw, 4rem);
 }
 
-.rail,
-.episodes-rail,
-.similar-rail {
+.rail, .episodes-rail, .similar-rail {
     display: flex;
     gap: 1.25rem;
     overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 0.5rem;
-
     &::-webkit-scrollbar { display: none; }
 }
-
-.rail-arrow {
-    position: absolute;
-    top: 50%;
-    width: 2.4rem;
-    height: 2.4rem;
-    border-radius: 50%;
-    background: rgba(15, 15, 15, 0.78);
-    border: 1px solid @border-strong;
-    color: @text;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(-50%);
-    transition: background 0.15s @ease, transform 0.15s @ease, opacity 0.15s @ease;
-    z-index: 2;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
-
-    &:hover {
-        background: rgba(0, 0, 0, 0.92);
-        transform: translateY(-50%) scale(1.05);
-    }
-}
-
-.rail-arrow-right { right: clamp(0.5rem, 2vw, 1.5rem); }
 
 // ---------- cast rail ----------
-.cast-item {
-    flex: 0 0 auto;
-    width: 110px;
-    text-align: center;
-    color: inherit;
-    text-decoration: none;
-}
-
+.cast-item { flex: 0 0 auto; width: 110px; text-align: center; }
 .cast-avatar-wrap {
-    position: relative;
-    width: 88px;
-    height: 88px;
-    margin: 0 auto 0.65rem;
-    border-radius: 50%;
-    overflow: hidden;
-    background: @bg-soft;
+    width: 88px; height: 88px; margin: 0 auto 0.65rem;
+    border-radius: 50%; overflow: hidden; background: @bg-soft;
     border: 1px solid @border;
-    transition: transform 0.2s @ease, border-color 0.2s @ease;
-
-    .cast-item:hover & {
-        transform: translateY(-2px);
-        border-color: @green-line;
-    }
-}
-
-.cast-avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.cast-avatar-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, @bg-elev, @bg-soft);
-    color: @text-muted;
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
-}
-
-.cast-name {
-    color: @text;
-    font-size: 0.88rem;
-    font-weight: 600;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding: 0 0.15rem;
-}
-
-.cast-char {
-    color: @text-faint;
-    font-size: 0.78rem;
-    line-height: 1.3;
-    margin-top: 0.15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding: 0 0.15rem;
-}
-
-// ============================================================
-// TABS (cosmetic)
-// ============================================================
-.tabs {
-    display: flex;
-    gap: 1.75rem;
-    border-bottom: 1px solid @border;
-    margin-bottom: 0.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar { display: none; }
-}
-
-.tab {
-    position: relative;
-    background: transparent;
-    border: 0;
-    padding: 0.5rem 0 0.95rem;
-    color: @text-faint;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color 0.15s @ease;
-
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: transparent;
-        border-radius: 2px;
-        transition: background 0.18s @ease;
-    }
-
-    &:hover { color: @text; }
-}
-
-.tab-active {
-    color: @text;
-    font-weight: 600;
-
-    &::after { background: @green; }
-}
-
-.tab-empty {
-    padding: 2.5rem 1rem;
-    text-align: center;
-    color: @text-faint;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed @border;
-    border-radius: @radius-md;
-
-    p { margin: 0; font-size: 0.95rem; }
-}
-
-// ============================================================
-// EPISODE PANEL
-// ============================================================
-.episode-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 0.5rem;
-    overflow: visible;
-}
-
-.episode-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    position: relative;
-    z-index: 100;
-    overflow: visible;
-}
-
-.episode-panel-title {
-    margin: 0;
-    font-size: clamp(1rem, 1.4vw, 1.2rem);
-    font-weight: 600;
-    color: @text;
-}
-
-// ---------- season dropdown ----------
-.season-dropdown {
-    position: relative;
-    z-index: 100;
-}
-
-.season-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    height: 2.4rem;
-    padding: 0 1rem;
-    border-radius: @radius-sm;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid @border-strong;
-    color: @text;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s @ease, border-color 0.15s @ease;
-
-    &:hover {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.25);
-    }
-}
-
-.season-trigger-open {
-    background: rgba(0, 146, 93, 0.15);
-    border-color: @green-line;
-}
-
-.season-caret {
-    width: 0.9rem;
-    height: 0.9rem;
-    fill: currentColor;
     transition: transform 0.2s @ease;
 
-    .season-trigger-open & { transform: rotate(180deg); }
+    .cast-item:hover & { transform: translateY(-2px); border-color: @green; }
 }
-
-.season-menu {
-    min-width: 10rem;
-    max-height: 280px;
-    overflow-y: auto;
-    padding: 0.4rem;
-    background: @bg-elev;
-    border: 1px solid @border-strong;
-    border-radius: @radius-sm;
-    box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
-}
-
-.season-option {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: 0;
-    padding: 0.55rem 0.85rem;
-    border-radius: 0.5rem;
-    color: @text-muted;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s @ease, color 0.15s @ease;
-
-    &:hover { background: rgba(255, 255, 255, 0.05); color: @text; }
-}
-
-.season-option-active {
-    color: @text;
-    background: rgba(0, 146, 93, 0.18) !important;
-}
+.cast-avatar { width: 100%; height: 100%; object-fit: cover; }
 
 // ============================================================
-// EPISODE CARDS (typographic, no thumbnails needed)
+// EPISODE CARDS (Cyber Style)
 // ============================================================
 .ep-card {
     flex: 0 0 320px;
-    position: relative;
     aspect-ratio: 16 / 9;
-    appearance: none;
-    -webkit-appearance: none;
-    padding: 0;
     border-radius: @radius-md;
     overflow: hidden;
-    background: linear-gradient(135deg, #0f1216 0%, #0a0c0e 60%, #060708 100%);
+    background: @bg-elev;
     border: 1px solid @border;
-    box-shadow: 0 18px 36px -16px rgba(0, 0, 0, 0.7);
-    text-decoration: none;
-    color: inherit;
-    isolation: isolate;
-    transition: transform 0.22s @ease, border-color 0.22s @ease, box-shadow 0.22s @ease;
-
-    @media only screen and (max-width: @medium) { flex-basis: 280px; }
-    @media only screen and (max-width: @small) { flex-basis: 240px; }
+    transition: all 0.22s @ease;
 
     &:hover {
-        transform: translateY(-4px);
-        border-color: @green-line;
-        box-shadow: 0 22px 44px -16px rgba(0, 146, 93, 0.35);
-
-        .ep-card-bg img { transform: scale(1.06); }
-        .ep-card-play { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        .ep-card-watermark { color: rgba(0, 146, 93, 0.32); }
-    }
-
-    &:active { transform: translateY(-2px) scale(0.99); }
-    &:disabled {
-        cursor: wait;
-        opacity: 0.85;
+        border-color: @green;
+        box-shadow: 0 0 20px @green-glow;
+        .ep-card-title { color: @green; }
     }
 }
 
-.ep-card-current {
-    border-color: @green;
-    box-shadow: 0 0 0 1px @green inset, 0 18px 40px -14px @green-glow;
-}
-
-.ep-card-watched {
-    .ep-card-overlay {
-        background:
-            radial-gradient(120% 80% at 100% 0%, rgba(0, 146, 93, 0.12) 0%, transparent 60%),
-            linear-gradient(180deg, rgba(5, 5, 5, 0.15) 0%, rgba(5, 5, 5, 0.7) 70%, rgba(5, 5, 5, 0.92) 100%);
-    }
-}
-
-.ep-watched-badge {
-    position: absolute;
-    top: 0.6rem;
-    left: 0.6rem;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, @green 0%, darken(@green, 10%) 100%);
-    box-shadow: 0 4px 12px -2px rgba(0, 146, 93, 0.6), 0 0 0 2px rgba(0, 0, 0, 0.3);
-    animation: badgePop 0.3s @ease;
-
-    svg {
-        width: 0.9rem;
-        height: 0.9rem;
-        fill: white;
-    }
-}
-
-@keyframes badgePop {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.ep-card-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    opacity: 0.18;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: blur(6px) saturate(1.05);
-        transform: scale(1.04);
-        transition: transform 0.5s @ease;
-    }
-}
-
-.ep-card-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background:
-        radial-gradient(120% 80% at 100% 0%, rgba(0, 146, 93, 0.18) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(5, 5, 5, 0.05) 0%, rgba(5, 5, 5, 0.65) 70%, rgba(5, 5, 5, 0.92) 100%);
-}
-
-.ep-card-watermark {
-    position: absolute;
-    top: 0.4rem;
-    right: 1rem;
-    z-index: 2;
-    font-size: clamp(3.5rem, 7vw, 5.5rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.05em;
-    color: rgba(255, 255, 255, 0.06);
-    transition: color 0.3s @ease;
-    pointer-events: none;
-    user-select: none;
-}
-
-.ep-card-body {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    padding: 1.1rem 1.2rem 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-.ep-card-tag {
-    color: @green;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.ep-card-title {
-    color: @text;
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-}
-
-.ep-card-play {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 3;
-    width: 3.4rem;
-    height: 3.4rem;
-    border-radius: 50%;
-    background: rgba(0, 146, 93, 0.92);
-    color: @text;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translate(-50%, -50%) scale(0.8);
-    opacity: 0;
-    transition: opacity 0.22s @ease, transform 0.22s @ease;
-    box-shadow: 0 12px 30px -8px rgba(0, 146, 93, 0.55);
-
-    svg {
-        width: 1.25rem;
-        height: 1.25rem;
-        fill: currentColor;
-        margin-left: 2px;
-    }
-}
-
-.ep-card-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 4;
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.5rem 0.85rem 0.6rem;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), transparent);
-}
-
-.ep-card-progress-current {
-    color: @text;
-    font-size: 0.72rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    flex: none;
-}
-
-.ep-card-progress-bar {
-    flex: 1;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.ep-card-progress-fill {
-    height: 100%;
-    background: @green;
-    box-shadow: 0 0 12px rgba(0, 146, 93, 0.7);
-    border-radius: 2px;
-}
+.ep-card-progress-fill { background: @green; box-shadow: 0 0 10px @green; }
 
 // ============================================================
-// SIMILAR MOVIES (2:3 posters)
+// SIMILAR MOVIES
 // ============================================================
 .similar-card {
     flex: 0 0 180px;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
     transition: transform 0.2s @ease;
-
-    @media only screen and (max-width: @small) { flex-basis: 140px; }
-
-    &:hover {
+    &:hover { 
         transform: translateY(-3px);
-
-        .similar-overlay { opacity: 1; }
-        .similar-play { transform: scale(1); opacity: 1; }
-        .similar-poster { border-color: @green-line; }
-        .similar-poster img { transform: scale(1.04); }
+        .similar-poster { border-color: @green; box-shadow: 0 0 15px @green-glow; }
     }
-
-    &:active { transform: translateY(-1px) scale(0.99); }
 }
 
 .similar-poster {
-    position: relative;
     aspect-ratio: 2 / 3;
-    width: 100%;
     border-radius: @radius-md;
     overflow: hidden;
-    background: @bg-soft;
     border: 1px solid @border;
-    transition: border-color 0.18s @ease, transform 0.2s @ease;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.4s @ease;
-    }
-}
-
-.similar-poster-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, @bg-soft, @bg-elev);
-}
-
-.similar-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.65) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s @ease;
-}
-
-.similar-play {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
-    color: @bg;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: scale(0.8);
-    opacity: 0;
-    transition: transform 0.22s @ease, opacity 0.22s @ease;
-    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
-
-    svg { width: 1.1rem; height: 1.1rem; fill: currentColor; margin-left: 2px; }
-}
-
-.similar-title {
-    color: @text;
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1.25;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-}
-
-.similar-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.45rem;
-    color: @text-faint;
-    font-size: 0.78rem;
-    font-weight: 500;
-}
-
-.similar-rating {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: @yellow;
-    font-weight: 600;
-
-    .similar-rating-star {
-        width: 0.8rem;
-        height: 0.8rem;
-        fill: @yellow;
-    }
-}
-
-.similar-sep {
-    color: @text-faint;
-    opacity: 0.6;
+    transition: all 0.18s @ease;
 }
 
 // ============================================================
-// RESPONSIVE — tablet (≤ 1300px)
-// ============================================================
-@media only screen and (max-width: @small) {
-    .hero { min-height: clamp(380px, 65vh, 580px); }
-    .hero-content {
-        margin-top: clamp(180px, 38vh, 320px);
-        padding: 0 1.5rem 2rem;
-        gap: 0.85rem;
-    }
-    .hero-title { font-size: clamp(1.8rem, 4.5vw, 2.4rem); }
-    .hero-meta-line {
-        font-size: 0.85rem;
-    }
-    .hero-actions {
-        flex-wrap: wrap;
-        gap: 0.65rem;
-        justify-content: flex-start;
-    }
-    .actions-primary { gap: 0.55rem; }
-    .actions-secondary { gap: 0.55rem; }
-    .btn-primary {
-        min-width: 10rem;
-        height: 2.85rem;
-        font-size: 0.9rem;
-    }
-    .btn-outline {
-        min-width: auto;
-        height: 2.65rem;
-        font-size: 0.85rem;
-        padding: 0 1rem;
-    }
-    .tabs { gap: 1.5rem; }
-    .episode-panel-header { flex-direction: row; align-items: center; }
-    .ep-card { flex-basis: 260px; }
-}
-
-// ============================================================
-// RESPONSIVE — mobile portrait (≤ 500px wide, portrait)
+// RESPONSIVE LANDSCAPE & MOBILE
 // ============================================================
 @media @phone-portrait {
-    .hero {
-        min-height: auto;
-        max-height: none;
-        padding-bottom: 0;
-    }
-    .hero-backdrop-img {
-        object-position: top center;
-    }
-    .hero-content {
-        margin-top: clamp(180px, 52vw, 280px);
-        padding: 0 1rem 1.25rem;
-        gap: 0.5rem;
-    }
-
-    // chips row
-    .chips-row {
-        gap: 0.4rem;
-        margin-bottom: 0.25rem;
-    }
-    .type-chip {
-        font-size: 0.6rem;
-        padding: 0 0.5rem;
-        height: 1.4rem;
-        border-radius: 0.35rem;
-    }
-    .vf-badge {
-        height: 1.4rem;
-        padding: 0 0.5rem 0 0.35rem;
-        gap: 0.3rem;
-        border-radius: 0.35rem;
-    }
-    .vf-badge-text {
-        min-width: 1.2rem;
-        height: 1rem;
-        padding: 0 0.25rem;
-        font-size: 0.55rem;
-        border-radius: 0.2rem;
-    }
-    .vf-badge-label {
-        font-size: 0.58rem;
-    }
-
-    .hero-title {
-        font-size: clamp(1.5rem, 6.5vw, 2rem);
-        margin-bottom: 0.15rem;
-        line-height: 1.1;
-        max-width: none;
-    }
-    .hero-meta-line {
-        font-size: 0.7rem;
-        gap: 0.2rem;
-        flex-wrap: wrap;
-        margin-bottom: 0.35rem;
-
-        > span + span::before {
-            margin: 0 0.4rem;
-        }
-    }
-    .hero-rating-icon {
-        width: 0.75rem !important;
-        height: 0.75rem !important;
-    }
-
-    // --- buttons: modern compact layout ---
-    .hero-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        width: 100%;
-        margin-top: 0.6rem;
-    }
-    .actions-primary {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        width: 100%;
-
-        // Only the first button (Watch Now) is full width
-        // Second button (Add Watchlist) will be moved to secondary row via JS
-    }
-    .actions-secondary {
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
-        width: 100%;
-    }
-    .btn-primary {
-        width: 100%;
-        min-width: 0;
-        height: 2.85rem;
-        font-size: 0.92rem;
-        font-weight: 600;
-        padding: 0 1.25rem;
-        border-radius: 0.8rem;
-        gap: 0.55rem;
-
-        .btn-icon {
-            width: 1.15rem;
-            height: 1.15rem;
-        }
-    }
-    .btn-outline {
-        flex: 1;
-        min-width: 0;
-        height: 2.6rem;
-        font-size: 0.78rem;
-        font-weight: 600;
-        padding: 0 0.85rem;
-        border-radius: 0.65rem;
-        gap: 0.4rem;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-
-        .btn-icon {
-            width: 0.95rem;
-            height: 0.95rem;
-        }
-
-        // On very small screens, keep text but truncate if needed
-        span:not(.btn-icon) {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
-
-    // --- content sections ---
-    .content {
-        padding: 1rem 1rem 2.5rem;
-        gap: 1.75rem;
-    }
-    .section {
-        margin-bottom: 0;
-        gap: 0.65rem;
-    }
-    .section-title {
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 0;
-    }
-
-    .description {
-        font-size: 0.85rem;
-        line-height: 1.6;
-        -webkit-line-clamp: 4;
-        color: @text-muted;
-    }
-    .more-toggle {
-        font-size: 0.85rem;
-        margin-top: 0.25rem;
-    }
-
-    // --- cast rail ---
-    .rail-wrap {
-        margin: 0 -1rem;
-        padding: 0 1rem;
-    }
-    .rail {
-        gap: 0.85rem;
-    }
-    .cast-item {
-        flex: 0 0 72px;
-        min-width: 72px;
-        max-width: 72px;
-    }
-    .cast-avatar-wrap {
-        width: 52px;
-        height: 52px;
-        margin-bottom: 0.5rem;
-    }
-    .cast-name {
-        font-size: 0.68rem;
-        font-weight: 500;
-    }
-    .cast-char {
-        font-size: 0.58rem;
-    }
-
-    // --- tabs ---
-    .tabs {
-        gap: 1.25rem;
-        border-bottom-width: 1px;
-        margin-bottom: 0.5rem;
-        padding-bottom: 0;
-    }
-    .tab {
-        font-size: 0.82rem;
-        padding: 0.35rem 0 0.65rem;
-    }
-
-    // --- episode panel ---
-    .episode-panel {
-        gap: 0.85rem;
-        overflow: visible;
-    }
-    .episode-panel-header {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0;
-        overflow: visible;
-    }
-    .episode-panel-title {
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    // episode cards
-    .episodes-rail {
-        gap: 0.65rem;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 0.25rem;
-    }
-    .ep-card {
-        flex: 0 0 calc(80vw - 1rem);
-        scroll-snap-align: start;
-        aspect-ratio: 16 / 9;
-        height: auto;
-        border-radius: 0.75rem;
-    }
-    .ep-card-watermark {
-        font-size: 3rem;
-        top: 0.25rem;
-        right: 0.75rem;
-    }
-    .ep-card-title {
-        font-size: 0.82rem;
-        font-weight: 600;
-    }
-    .ep-card-tag {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-    }
-    .ep-card-body {
-        padding: 0.75rem 0.85rem;
-        gap: 0.2rem;
-    }
-    .ep-card-play {
-        width: 2.8rem;
-        height: 2.8rem;
-
-        svg {
-            width: 1rem;
-            height: 1rem;
-        }
-    }
-    .ep-watched-badge {
-        width: 1.4rem;
-        height: 1.4rem;
-        top: 0.45rem;
-        left: 0.45rem;
-
-        svg {
-            width: 0.7rem;
-            height: 0.7rem;
-        }
-    }
-    .ep-card-progress {
-        padding: 0.35rem 0.65rem 0.45rem;
-    }
-    .ep-card-progress-current {
-        font-size: 0.65rem;
-    }
-
-    // similar rail
-    .similar-rail {
-        gap: 0.6rem;
-        scroll-snap-type: x mandatory;
-    }
-    .similar-card {
-        flex: 0 0 calc(38vw - 0.4rem);
-        scroll-snap-align: start;
-        gap: 0.5rem;
-    }
-    .similar-poster {
-        border-radius: 0.6rem;
-    }
-    .similar-title {
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-    .similar-meta {
-        font-size: 0.65rem;
-    }
-    .similar-play {
-        width: 2.4rem;
-        height: 2.4rem;
-
-        svg {
-            width: 0.9rem;
-            height: 0.9rem;
-        }
-    }
-
-    // hide scroll arrows on mobile (swipe natively)
-    .rail-arrow { display: none; }
-
-    // season dropdown
-    .season-dropdown {
-        position: relative;
-        z-index: 200;
-    }
-    .season-trigger {
-        height: 1.85rem;
-        padding: 0 0.65rem;
-        font-size: 0.75rem;
-        border-radius: 0.45rem;
-    }
-    .season-caret {
-        width: 0.75rem;
-        height: 0.75rem;
-    }
-    .season-menu {
-        min-width: 8rem;
-    }
-    .season-option {
-        padding: 0.4rem 0.65rem;
-        font-size: 0.78rem;
-    }
-
-    // section similar
-    .section-similar {
-        margin-top: 0.25rem;
-        padding-top: 1.25rem;
-    }
+    .hero { min-height: 65vh; }
+    .hero-content { margin-top: 30vh; padding: 0 1rem 1.5rem; }
+    .hero-title { font-size: 1.8rem; }
+    .btn-primary { width: 100%; }
 }
 
-// ============================================================
-// RESPONSIVE — mobile landscape (≤ 1000px wide, landscape)
-// ============================================================
 @media @phone-landscape {
-    .hero { min-height: 55vw; max-height: 360px; }
-    .hero-content {
-        margin-top: clamp(100px, 28vw, 180px);
-        padding: 0 1.5rem 1.25rem;
-        gap: 0.5rem;
-    }
-    .hero-title { font-size: clamp(1.35rem, 3.5vw, 1.7rem); }
-    .hero-meta-line { font-size: 0.75rem; }
-    .chips-row { gap: 0.4rem; }
-    .type-chip {
-        height: 1.5rem;
-        font-size: 0.62rem;
-        padding: 0 0.55rem;
-    }
-    .vf-badge {
-        height: 1.5rem;
-        padding: 0 0.55rem 0 0.4rem;
-    }
-    .vf-badge-text {
-        height: 1.1rem;
-        min-width: 1.3rem;
-        font-size: 0.58rem;
-    }
-    .vf-badge-label { font-size: 0.62rem; }
-    .hero-actions {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    .actions-primary {
-        flex-direction: row;
-        gap: 0.45rem;
-    }
-    .actions-secondary {
-        flex-direction: row;
-        gap: 0.45rem;
-    }
-    .btn-primary {
-        height: 2.4rem;
-        min-width: 9rem;
-        font-size: 0.8rem;
-        padding: 0 1rem;
-    }
-    .btn-outline {
-        height: 2.25rem;
-        min-width: auto;
-        font-size: 0.75rem;
-        padding: 0 0.85rem;
-    }
-    .rail-arrow { display: none; }
-    .content { padding: 0.75rem 1.5rem 2rem; gap: 1.25rem; }
-    .ep-card { flex: 0 0 220px; }
-    .similar-card { flex: 0 0 120px; }
-}
-
-// ============================================================
-// RESPONSIVE — very small screens (≤ 320px)
-// ============================================================
-@media only screen and (max-width: 320px) {
-    .hero-content {
-        padding: 0 0.75rem 1rem;
-    }
-    .hero-title {
-        font-size: 1.35rem;
-    }
-    .hero-meta-line {
-        font-size: 0.65rem;
-    }
-    .btn-primary {
-        height: 2.5rem;
-        font-size: 0.82rem;
-    }
-    .btn-outline {
-        height: 2.15rem;
-        font-size: 0.7rem;
-        padding: 0 0.5rem;
-    }
-    .content {
-        padding: 0.75rem 0.75rem 2rem;
-    }
-    .ep-card {
-        flex: 0 0 calc(88vw - 1rem);
-    }
-    .similar-card {
-        flex: 0 0 calc(42vw - 0.3rem);
-    }
+    .hero { min-height: 100vh; } // Ranje landscape
+    .hero-content { margin-top: 15vh; }
 }

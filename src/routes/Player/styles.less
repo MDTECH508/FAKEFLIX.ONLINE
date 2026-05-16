@@ -1,4 +1,4 @@
-// Copyright (C) 2017-2023 Smart code 203358507
+                // Copyright (C) 2017-2023 Smart code 203358507
 
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
 @import (reference) '~stremio/common/screen-sizes.less';
@@ -13,7 +13,10 @@
     nav-bar-icon: icon;
 }
 
-@background-color: rgba(0, 0, 0, 1);
+@background-color: #0f0f0f; // YouTube dark theme background
+@youtube-red: #ff0000;
+@youtube-gray: #272727;
+@youtube-light-gray: #3f3f3f;
 
 html:not(.active-slider-within) {
     .player-container.overlayHidden {
@@ -21,7 +24,7 @@ html:not(.active-slider-within) {
 
         .nav-bar-layer, .control-bar-layer, .menu-layer, .side-drawer-button-layer {
             opacity: 0;
-            transition: opacity 200ms;
+            transition: opacity 200ms ease-in-out;
         }
     }
 }
@@ -50,60 +53,211 @@ html:not(.active-slider-within) {
                 width: 100vw;
                 height: 100vh;
                 object-fit: cover;
-                opacity: 0.6;
+                opacity: 0.3;
+                filter: blur(8px);
             }
         }
 
         &.nav-bar-layer {
             bottom: initial;
-            background: transparent;
+            background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 100%);
             overflow: visible;
+            backdrop-filter: blur(0);
 
             &::before {
-                position: absolute;
-                right: 0;
-                top: 0;
-                left: 0;
-                z-index: -1;
-                box-shadow: 0 0 8rem 6rem @color-background-dark5;
-                content: "";
+                display: none;
             }
 
             .nav-bar-button-container {
+                position: relative;
+                border-radius: 40px;
+                padding: 8px 12px;
+                transition: all 0.2s ease;
+                
                 &:hover {
-                    background: transparent;
+                    background: rgba(255, 255, 255, 0.1);
+                    transform: scale(1.05);
+                }
+                
+                &:active {
+                    transform: scale(0.95);
                 }
 
                 .nav-bar-icon {
                     color: var(--primary-foreground-color);
+                    transition: color 0.2s ease;
+                }
+                
+                &:hover .nav-bar-icon {
+                    color: @youtube-red;
                 }
             }
 
             .nav-bar-title {
+                font-weight: 600;
+                font-size: 1.1rem;
                 color: var(--primary-foreground-color);
+                letter-spacing: -0.5px;
             }
         }
 
         &.side-drawer-button-layer {
             position: fixed;
             top: 50%;
-            right: -4rem;
+            right: 0;
             left: initial;
             transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 8px 0 0 8px;
+            padding: 12px 8px;
+            transition: all 0.2s ease;
+            
+            &:hover {
+                background: rgba(0,0,0,0.8);
+                padding-right: 12px;
+            }
         }
 
         &.control-bar-layer {
             top: initial;
             overflow: visible;
-
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
+            padding: 0 16px 16px 16px;
+            
             &::before {
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                z-index: -1;
-                box-shadow: 0 0 8rem 8rem @color-background-dark5;
-                content: "";
+                display: none;
+            }
+            
+            // YouTube-style controls container
+            .controls-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                
+                .left-controls, .right-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .center-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+                
+                .control-button {
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    padding: 8px;
+                    border-radius: 50%;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                        transform: scale(1.05);
+                    }
+                    
+                    &:active {
+                        transform: scale(0.95);
+                    }
+                    
+                    .icon {
+                        width: 24px;
+                        height: 24px;
+                        color: white;
+                        transition: color 0.2s ease;
+                    }
+                    
+                    &.play-button .icon {
+                        width: 36px;
+                        height: 36px;
+                    }
+                    
+                    &.volume-button:hover .icon {
+                        color: @youtube-red;
+                    }
+                }
+                
+                .time-display {
+                    font-size: 14px;
+                    color: white;
+                    font-family: monospace;
+                    letter-spacing: 0.5px;
+                    
+                    .separator {
+                        margin: 0 4px;
+                        opacity: 0.7;
+                    }
+                }
+                
+                // YouTube-style progress bar container
+                .progress-container {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    
+                    .progress-bar-wrapper {
+                        flex: 1;
+                        position: relative;
+                        height: 4px;
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 2px;
+                        cursor: pointer;
+                        transition: height 0.2s ease;
+                        
+                        &:hover {
+                            height: 6px;
+                            
+                            .progress-bar {
+                                .progress-thumb {
+                                    opacity: 1;
+                                    transform: scale(1);
+                                }
+                            }
+                        }
+                        
+                        .progress-bar {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            height: 100%;
+                            background: @youtube-red;
+                            border-radius: 2px;
+                            transition: width 0.1s linear;
+                            
+                            .progress-thumb {
+                                position: absolute;
+                                right: -6px;
+                                top: 50%;
+                                transform: translateY(-50%) scale(0);
+                                width: 12px;
+                                height: 12px;
+                                background: @youtube-red;
+                                border-radius: 50%;
+                                opacity: 0;
+                                transition: all 0.2s ease;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                            }
+                        }
+                        
+                        .buffered-bar {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            height: 100%;
+                            background: rgba(255, 255, 255, 0.3);
+                            border-radius: 2px;
+                        }
+                    }
+                }
             }
         }
 
@@ -111,22 +265,60 @@ html:not(.active-slider-within) {
             top: initial;
             left: 0;
             right: 0;
-            bottom: 10rem;
+            bottom: 8rem;
+            pointer-events: none;
+            
+            .indicator {
+                background: rgba(0,0,0,0.7);
+                backdrop-filter: blur(4px);
+                border-radius: 4px;
+                padding: 4px 8px;
+                font-size: 12px;
+                color: white;
+            }
         }
 
         &.menu-layer {
             top: initial;
             left: initial;
-            right: 4rem;
-            bottom: 8rem;
-            max-height: calc(100% - 13.5rem);
-            max-width: calc(100% - 4rem);
-            border-radius: var(--border-radius);
-            background-color: var(--modal-background-color);
-            box-shadow: 0 1.35rem 2.7rem @color-background-dark5-40,
-                0 1.1rem 0.85rem @color-background-dark5-20;
-            backdrop-filter: blur(15px);
+            right: 2rem;
+            bottom: 6rem;
+            max-height: calc(100% - 10rem);
+            max-width: 400px;
+            width: 100%;
+            border-radius: 12px;
+            background-color: rgba(33, 33, 33, 0.98);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
             overflow: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            
+            // YouTube-style menu items
+            .menu-item {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 12px 16px;
+                cursor: pointer;
+                transition: background 0.2s ease;
+                
+                &:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                }
+                
+                .menu-icon {
+                    width: 20px;
+                    height: 20px;
+                    color: white;
+                    opacity: 0.8;
+                }
+                
+                .menu-label {
+                    font-size: 14px;
+                    color: white;
+                    font-weight: 500;
+                }
+            }
         }
 
         &.side-drawer-layer {
@@ -134,15 +326,163 @@ html:not(.active-slider-within) {
             right: 0;
             left: initial;
             bottom: initial;
+            width: 320px;
+            background: rgba(33, 33, 33, 0.98);
+            backdrop-filter: blur(12px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+    }
+    
+    // Volume slider YouTube style
+    .volume-slider {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        background: rgba(33,33,33,0.95);
+        backdrop-filter: blur(8px);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+        display: none;
+        
+        input {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            outline: none;
+            
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 12px;
+                height: 12px;
+                background: @youtube-red;
+                border-radius: 50%;
+                cursor: pointer;
+                
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+            
+            &:hover {
+                height: 6px;
+            }
+        }
+    }
+    
+    .volume-button:hover + .volume-slider {
+        display: block;
+    }
+    
+    // Settings panel YouTube style
+    .settings-panel {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        width: 280px;
+        background: rgba(33,33,33,0.98);
+        backdrop-filter: blur(12px);
+        border-radius: 12px;
+        margin-bottom: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        overflow: hidden;
+        
+        .settings-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            
+            &:hover {
+                background: rgba(255,255,255,0.1);
+            }
+            
+            .option-label {
+                font-size: 14px;
+                color: white;
+            }
+            
+            .option-value {
+                font-size: 14px;
+                color: rgba(255,255,255,0.7);
+            }
         }
     }
 }
 
+// Quality selector YouTube style
+.quality-selector {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    width: 200px;
+    background: rgba(33,33,33,0.98);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    
+    .quality-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        color: white;
+        font-size: 13px;
+        
+        &:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        &.active {
+            color: @youtube-red;
+            font-weight: 600;
+        }
+    }
+}
+
+// Responsive styles
 @media screen and (max-width: @xsmall) {
     .player-container {
         .layer {
             &.side-drawer-button-layer {
-                right: -2rem;
+                right: 0;
+                padding: 8px 6px;
+            }
+            
+            &.menu-layer {
+                right: 1rem;
+                bottom: 5rem;
+                max-width: calc(100% - 2rem);
+            }
+            
+            &.control-bar-layer .controls-container {
+                .time-display {
+                    font-size: 11px;
+                }
+                
+                .control-button .icon {
+                    width: 20px;
+                    height: 20px;
+                    
+                    &.play-button .icon {
+                        width: 28px;
+                        height: 28px;
+                    }
+                }
             }
         }
     }
@@ -152,9 +492,43 @@ html:not(.active-slider-within) {
     .player-container {
         .layer {
             &.menu-layer {
-                right: 2.5rem;
-                bottom: 11rem;
+                right: 1rem;
+                bottom: 6rem;
             }
+            
+            &.control-bar-layer {
+                padding: 0 8px 12px 8px;
+            }
+        }
+    }
+}
+
+// Animation keyframes
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Hover effects for YouTube style
+.player-container:hover {
+    .control-bar-layer {
+        .controls-container .progress-container .progress-bar-wrapper {
+            height: 6px;
         }
     }
 }

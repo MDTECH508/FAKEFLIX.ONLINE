@@ -58,20 +58,31 @@
     --color-placeholder: #60606080;
     --color-placeholder-text: @color-surface-50;
     --color-placeholder-background: @color-surface-dark5-20;
-    --primary-background-color: rgba(5, 5, 5, 1);
-    --secondary-background-color: rgba(8, 18, 12, 1);
-    --primary-foreground-color: rgba(255, 255, 255, 0.9);
-    --secondary-foreground-color: rgb(5, 5, 5, 1);
-    --primary-accent-color: rgb(0, 146, 93);
-    --secondary-accent-color: rgba(0, 169, 108, 1);
-    --tertiary-accent-color: rgba(246, 199, 0, 1);
-    --quaternary-accent-color: rgba(0, 100, 65, 1);
-    --overlay-color: rgba(255, 255, 255, 0.05);
-    --modal-background-color: rgba(10, 12, 10, 1);
-    --outer-glow: 0px 0px 15px rgba(0, 146, 93, 0.37);
+    
+    // Netflix-inspired Lip Glass Blur Theme
+    --primary-background-color: rgba(0, 0, 0, 0.95);
+    --secondary-background-color: rgba(20, 20, 27, 0.85);
+    --primary-foreground-color: rgba(255, 255, 255, 0.95);
+    --secondary-foreground-color: rgba(255, 255, 255, 0.85);
+    --primary-accent-color: rgb(229, 9, 20); // Netflix Red
+    --secondary-accent-color: rgba(229, 9, 20, 0.8);
+    --tertiary-accent-color: rgba(255, 215, 0, 0.9);
+    --quaternary-accent-color: rgba(180, 0, 0, 0.9);
+    
+    // Glass morphism effects
+    --glass-background: rgba(20, 20, 30, 0.65);
+    --glass-background-strong: rgba(15, 15, 22, 0.85);
+    --glass-blur: blur(12px);
+    --glass-blur-strong: blur(20px);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+    --glass-border-light: 1px solid rgba(255, 255, 255, 0.08);
+    
+    --overlay-color: rgba(255, 255, 255, 0.08);
+    --modal-background-color: rgba(10, 12, 10, 0.95);
+    --outer-glow: 0px 0px 20px rgba(229, 9, 20, 0.4);
     --warning-accent-color: rgba(255, 165, 0, 1);
     --danger-accent-color: rgba(220, 38, 38, 1);  
-    --border-radius: 0.75rem;
+    --border-radius: 0.5rem;
     --top-overlay-size: @top-overlay-size;
     --bottom-overlay-size: @bottom-overlay-size;
     --overlap-size: @overlap-size;
@@ -140,6 +151,7 @@
 ::-webkit-scrollbar-thumb {
     border-radius: var(--scroll-bar-size);
     background-color: var(--overlay-color);
+    transition: background-color 0.2s ease;
 
     &:hover {
         background-color: var(--primary-accent-color);
@@ -152,6 +164,18 @@
 
 svg {
     overflow: visible;
+}
+
+// Glass morphism animation
+@keyframes glassFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: var(--glass-blur);
+    }
 }
 
 html {
@@ -173,14 +197,35 @@ html {
     body {
         width: 100%;
         height: 100%;
-        background: linear-gradient(41deg, var(--primary-background-color) 0%, var(--secondary-background-color) 100%);
+        background: radial-gradient(ellipse at top, rgba(30, 30, 40, 0.8), rgba(0, 0, 0, 0.98)), 
+                    linear-gradient(135deg, var(--primary-background-color) 0%, var(--secondary-background-color) 100%);
         -webkit-font-smoothing: antialiased;
 
+        // Main app glass container
         :global(#app) {
             position: relative;
             z-index: 0;
             width: 100%;
             height: 100%;
+            backdrop-filter: var(--glass-blur);
+            background: var(--glass-background);
+            animation: glassFadeIn 0.5s ease-out;
+
+            // Glass overlay effect
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, 
+                    rgba(255, 255, 255, 0.05) 0%, 
+                    rgba(255, 255, 255, 0.02) 50%,
+                    transparent 100%);
+                pointer-events: none;
+                z-index: 1;
+            }
 
             .toasts-container {
                 position: absolute;
@@ -206,11 +251,19 @@ html {
                 justify-content: center;
                 padding: 0 1.5rem;
                 font-size: 1rem;
+                font-weight: 500;
                 color: var(--primary-foreground-color);
                 border-radius: var(--border-radius);
-                background-color: var(--modal-background-color);
-                box-shadow: var(--outer-glow);
-                transition: opacity 0.1s ease-out;
+                background: var(--glass-background-strong);
+                backdrop-filter: var(--glass-blur-strong);
+                border: var(--glass-border);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--outer-glow);
+                transition: all 0.2s ease-out;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 12px 40px rgba(229, 9, 20, 0.3);
+                }
             }
 
             .file-drop-container {
@@ -226,6 +279,8 @@ html {
 
                 &:global(.active) {
                     border-color: var(--primary-accent-color);
+                    background: rgba(229, 9, 20, 0.05);
+                    backdrop-filter: blur(8px);
                 }
             }
 
@@ -240,12 +295,32 @@ html {
             .router {
                 width: 100%;
                 height: 100%;
+                position: relative;
+                z-index: 2;
             }
 
             .loader-container, .error-container {
                 width: 100%;
                 height: 100%;
+                
+                // Glass style for loaders
+                background: var(--glass-background);
+                backdrop-filter: var(--glass-blur);
+                border-radius: var(--border-radius);
             }
+        }
+    }
+}
+
+// Netflix-style hover effects
+:global {
+    .card, .poster, .button {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        
+        &:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            filter: brightness(1.1);
         }
     }
 }
@@ -294,4 +369,18 @@ html {
     :root {
         --bottom-overlay-size: 6rem;
     }
+}
+
+// Custom Netflix-style loading animation
+@keyframes netflixPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading-spinner {
+    animation: netflixPulse 1.5s ease-in-out infinite;
 }

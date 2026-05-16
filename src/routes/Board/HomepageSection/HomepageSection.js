@@ -21,7 +21,7 @@ const HomepageSection = ({ className, title, items, sectionIndex }) => {
                 <div className={styles['title-container']} title={title}>{title}</div>
                 {
                     items.length > PREVIEW_COUNT ?
-                        <Button className={styles['see-all-container']} title={'See All'} href={seeAllHref} tabIndex={-1}>
+                        <Button className={styles['see-all-container']} title={'more movies'} href={seeAllHref} tabIndex={-1}>
                             <div className={styles['label']}>See All</div>
                             <Icon className={styles['icon']} name={'chevron-forward'} />
                         </Button>

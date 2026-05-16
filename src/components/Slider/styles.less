@@ -3,9 +3,9 @@
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
 
 @audio-boost-background: linear-gradient(to right,
-    var(--primary-foreground-color) 0%,
-    var(--primary-foreground-color) 50%,
-    var(--warning-accent-color) 75%,
+    var(--primary-accent-color) 0%,
+    var(--secondary-accent-color) 30%,
+    var(--warning-accent-color) 70%,
     var(--danger-accent-color) 100%) !important;
 
 html.active-slider-within {
@@ -21,10 +21,27 @@ html.active-slider-within {
     z-index: 0;
     overflow: visible;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:global(.disabled) {
         pointer-events: none;
         opacity: 0.5;
+    }
+
+    &:hover {
+        .track {
+            opacity: 0.4;
+            transform: scaleY(1.2);
+        }
+        
+        .thumb {
+            transform: translateX(-50%) scale(1.2);
+            box-shadow: 0 0 20px var(--primary-accent-color);
+        }
+        
+        .track-before {
+            filter: brightness(1.2);
+        }
     }
 
     .layer {
@@ -46,12 +63,42 @@ html.active-slider-within {
         width: 100%;
         height: var(--track-size);
         border-radius: var(--track-size);
-        background-color: var(--primary-accent-color);
-        opacity: 0.2;
+        background: linear-gradient(90deg, 
+            var(--primary-accent-color) 0%, 
+            var(--quaternary-accent-color) 100%);
+        opacity: 0.25;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+        
+        &:hover::before {
+            left: 100%;
+        }
 
         &.audio-boost {
-            opacity: 0.3;
+            opacity: 0.35;
             background: @audio-boost-background;
+            
+            &::before {
+                background: linear-gradient(90deg, 
+                    transparent, 
+                    rgba(255, 255, 255, 0.4), 
+                    transparent);
+            }
         }
     }
 
@@ -60,7 +107,24 @@ html.active-slider-within {
         flex: none;
         height: var(--track-size);
         border-radius: var(--track-size);
-        background-color: var(--overlay-color);
+        background: linear-gradient(90deg, 
+            var(--primary-accent-color), 
+            var(--secondary-accent-color));
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 8px rgba(0, 146, 93, 0.5);
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-foreground-color);
+            border-radius: 2px;
+            opacity: 0.8;
+        }
     }
 
     .track-after {
@@ -69,15 +133,23 @@ html.active-slider-within {
         width: 100%;
         height: var(--track-size);
         border-radius: var(--track-size);
-        background-color: var(--primary-foreground-color);
+        background: linear-gradient(90deg, 
+            var(--primary-foreground-color) 0%,
+            var(--overlay-color) 100%);
         mask-image: linear-gradient(to right,
             black 0%,
             black var(--mask-width),
             transparent var(--mask-width)
         );
+        transition: all 0.2s ease;
 
         &.audio-boost {
             background: @audio-boost-background;
+            mask-image: linear-gradient(to right,
+                black 0%,
+                black var(--mask-width),
+                transparent var(--mask-width)
+            );
         }
     }
 
@@ -87,7 +159,128 @@ html.active-slider-within {
         width: var(--thumb-size);
         height: var(--thumb-size);
         transform: translateX(-50%);
-        background-color: var(--primary-foreground-color);
+        background: radial-gradient(circle at 30% 30%, 
+            var(--primary-foreground-color), 
+            var(--primary-accent-color));
         border-radius: 100%;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: grab;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        
+        &:active {
+            cursor: grabbing;
+            transform: translateX(-50%) scale(0.95);
+        }
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%) scale(1);
+            background: radial-gradient(circle, 
+                rgba(255, 255, 255, 0.8) 0%, 
+                transparent 70%);
+            border-radius: 100%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        &:hover::before {
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            transform: translate(-50%, -50%);
+            background: var(--primary-background-color);
+            border-radius: 100%;
+            opacity: 0.5;
+        }
+    }
+}
+
+// Animation pour le chargement du slider
+@keyframes sliderPulse {
+    0%, 100% {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.slider-container:global(.loading) {
+    .track {
+        animation: sliderPulse 1.5s ease-in-out infinite;
+    }
+    
+    .thumb {
+        animation: sliderPulse 1.5s ease-in-out infinite;
+    }
+}
+
+// Style pour afficher la valeur du slider
+.slider-value {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--primary-foreground-color);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .slider-container:hover & {
+        opacity: 1;
+    }
+}
+
+// Version compacte du slider
+.slider-container.compact {
+    --track-size: 3px;
+    --thumb-size: 12px;
+    
+    .track-before::after {
+        display: none;
+    }
+    
+    .thumb::before {
+        display: none;
+    }
+}
+
+// Version avec label
+.slider-container.with-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .slider-label {
+        font-size: 12px;
+        color: var(--primary-foreground-color);
+        opacity: 0.7;
+        min-width: 40px;
+    }
+    
+    .slider-wrapper {
+        flex: 1;
+        position: relative;
     }
 }

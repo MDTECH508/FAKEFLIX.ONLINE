@@ -3,23 +3,45 @@
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
 
 .addon-details-modal-container {
-    .addon-details-container, .addon-details-message-container {
+    .addon-details-container, 
+    .addon-details-message-container {
         width: 40rem;
         max-width: 100%;
         color: var(--primary-foreground-color);
+        padding: 1rem;
+        border-radius: 0.5rem;
     }
 
+    // Eta chajman (loading)
+    .addon-details-message-container {
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.5;
+        
+        div {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.8;
+            word-break: break-word;
+        }
+    }
+
+    // Bouton anile (Close)
     .cancel-button {
         background-color: transparent;
         opacity: 0.3;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
 
         &:hover {
             outline: var(--focus-outline-size) solid var(--primary-foreground-color);
             opacity: 1;
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         &:focus {
             outline-color: var(--primary-foreground-color);
+            outline-offset: 2px;
         }
 
         .cancel-button-label {
@@ -27,16 +49,67 @@
         }
     }
 
+    // Bouton dezenstalasyon
     .uninstall-button {
         background-color: var(--overlay-color);
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
     
         &:hover {
             outline: var(--focus-outline-size) solid var(--overlay-color);
             background-color: transparent;
+            border-color: var(--overlay-color);
         }
 
         &:focus {
             outline-color: var(--primary-foreground-color);
+            outline-offset: 2px;
         }
+        
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+
+    // Bouton enstalasyon (si w bezwen ajoute)
+    .install-button {
+        background-color: var(--primary-color);
+        color: white;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    // Responsivite pou ekran piti
+    @media (max-width: 768px) {
+        .addon-details-container, 
+        .addon-details-message-container {
+            width: 90vw;
+            padding: 0.75rem;
+        }
+        
+        .cancel-button, 
+        .uninstall-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    // Animasyon loading (si ou vle ajoute)
+    @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+    }
+    
+    .loading-indicator {
+        animation: pulse 1.5s infinite;
     }
 }
